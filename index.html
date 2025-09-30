@@ -216,8 +216,8 @@
       // Show modal result
       if (correctCount === questions.length) {
         showModal("🎉 Congratulations! You answered all correctly. Monad Master!");
-      } else if (wrongCount >= 2) {
-        showModal("😂 WTF Bro... You missed " + wrongCount + " questions!");
+      } else if (wrongCount >= 6) {
+        showModal("😂 WTF Bro... your " + wrongCount + "questions is wrong!");
       } else {
         showModal("✅ You got " + correctCount + " correct and " + wrongCount + " wrong.");
       }
