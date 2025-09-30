@@ -73,6 +73,39 @@
     footer a:hover {
       text-decoration: underline;
     }
+    /* Popup Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 500px;
+    }
+    .modal-content img {
+      width: 100%;
+      border-radius: 12px;
+    }
+    .close-btn {
+      margin-top: 10px;
+      background: #5a2ecf;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -86,65 +119,32 @@
     <a href="https://x.com/InderXBT" target="_blank">Inder</a> ❤️
   </footer>
 
+  <!-- Modal -->
+  <div id="resultModal" class="modal">
+    <div class="modal-content">
+      <h2 id="modalText"></h2>
+      <img id="modalGif" src="" alt="Result Gif">
+      <br>
+      <button class="close-btn" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+
   <script>
     const questions = [
-      {
-        q: "1. What is Monad primarily known as?",
-        options: ["A Layer 2 solution", "An Ethereum-compatible Layer 1", "A sidechain", "A private blockchain"],
-        answer: 1
-      },
-      {
-        q: "2. What is Monad’s target transactions per second (TPS)?",
-        options: ["1,000", "5,000", "10,000", "100,000"],
-        answer: 2
-      },
-      {
-        q: "3. Monad is fully compatible with which virtual machine?",
-        options: ["Bitcoin VM", "Cosmos VM", "Solana VM", "Ethereum VM (EVM)"],
-        answer: 3
-      },
-      {
-        q: "4. Which feature ensures portability of Ethereum apps to Monad?",
-        options: ["Layer 0 consensus", "Bytecode compatibility", "Shard mechanism", "Custom RPC only"],
-        answer: 1
-      },
-      {
-        q: "5. Monad supports which RPC compatibility?",
-        options: ["Cosmos RPC", "Ethereum RPC", "Polkadot RPC", "Custom only"],
-        answer: 1
-      },
-      {
-        q: "6. What type of execution system does Monad use?",
-        options: ["Serial execution", "Parallel execution", "Hybrid execution", "Randomized execution"],
-        answer: 1
-      },
-      {
-        q: "7. Monad claims to provide how much faster finality compared to Ethereum?",
-        options: ["10x faster", "100x faster", "1,000x faster", "Same as Ethereum"],
-        answer: 0
-      },
-      {
-        q: "8. Which consensus mechanism does Monad utilize?",
-        options: ["Proof of Authority", "Proof of Work", "Proof of Stake", "Delegated Proof of Stake"],
-        answer: 2
-      },
-      {
-        q: "9. Monad’s execution layer is optimized for what?",
-        options: ["Gaming only", "DeFi & scalability", "NFT storage", "Private transactions"],
-        answer: 1
-      },
-      {
-        q: "10. Which of the following is TRUE about Monad?",
-        options: [
-          "It requires rewriting Ethereum apps",
-          "It runs EVM bytecode without changes",
-          "It only supports Solana programs",
-          "It is not open to developers"
-        ],
-        answer: 1
-      }
+      { q: "1. What is Monad primarily known as?", options: ["A Layer 2 solution", "An Ethereum-compatible Layer 1", "A sidechain", "A private blockchain"], answer: 1 },
+      { q: "2. What is Monad’s target transactions per second (TPS)?", options: ["1,000", "5,000", "10,000", "100,000"], answer: 2 },
+      { q: "3. Monad is fully compatible with which virtual machine?", options: ["Bitcoin VM", "Cosmos VM", "Solana VM", "Ethereum VM (EVM)"], answer: 3 },
+      { q: "4. Which feature ensures portability of Ethereum apps to Monad?", options: ["Layer 0 consensus", "Bytecode compatibility", "Shard mechanism", "Custom RPC only"], answer: 1 },
+      { q: "5. Monad supports which RPC compatibility?", options: ["Cosmos RPC", "Ethereum RPC", "Polkadot RPC", "Custom only"], answer: 1 },
+      { q: "6. What type of execution system does Monad use?", options: ["Serial execution", "Parallel execution", "Hybrid execution", "Randomized execution"], answer: 1 },
+      { q: "7. Monad claims to provide how much faster finality compared to Ethereum?", options: ["10x faster", "100x faster", "1,000x faster", "Same as Ethereum"], answer: 0 },
+      { q: "8. Which consensus mechanism does Monad utilize?", options: ["Proof of Authority", "Proof of Work", "Proof of Stake", "Delegated Proof of Stake"], answer: 2 },
+      { q: "9. Monad’s execution layer is optimized for what?", options: ["Gaming only", "DeFi & scalability", "NFT storage", "Private transactions"], answer: 1 },
+      { q: "10. Which of the following is TRUE about Monad?", options: ["It requires rewriting Ethereum apps", "It runs EVM bytecode without changes", "It only supports Solana programs", "It is not open to developers"], answer: 1 }
     ];
 
+    let correctCount = 0;
+    let wrongCount = 0;
     const quizContainer = document.getElementById("quiz");
 
     questions.forEach((item) => {
@@ -158,30 +158,49 @@
       const opts = document.createElement("div");
       opts.classList.add("options");
 
+      const answerDiv = document.createElement("div");
+      answerDiv.classList.add("answer");
+      answerDiv.textContent = "Correct answer: " + item.options[item.answer];
+
       item.options.forEach((opt, i) => {
         const btn = document.createElement("button");
         btn.textContent = opt;
         btn.onclick = () => {
           if (i === item.answer) {
             btn.classList.add("correct");
+            correctCount++;
           } else {
             btn.classList.add("wrong");
+            wrongCount++;
             answerDiv.style.display = "block";
           }
           Array.from(opts.children).forEach(b => b.disabled = true);
+
+          // Check conditions
+          if (correctCount === questions.length) {
+            showModal("🎉 Congratulations! You’re a true Monad Master!", "https://media.giphy.com/media/26AHONQ79FdWZhAI0/giphy.gif");
+          } else if (wrongCount === 2) {
+            showModal("😂 WTF Bro... Study Monad again!", "https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif");
+          }
         };
         opts.appendChild(btn);
       });
-
-      const answerDiv = document.createElement("div");
-      answerDiv.classList.add("answer");
-      answerDiv.textContent = "Correct answer: " + item.options[item.answer];
 
       div.appendChild(q);
       div.appendChild(opts);
       div.appendChild(answerDiv);
       quizContainer.appendChild(div);
     });
+
+    function showModal(text, gifUrl) {
+      document.getElementById("modalText").innerText = text;
+      document.getElementById("modalGif").src = gifUrl;
+      document.getElementById("resultModal").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("resultModal").style.display = "none";
+    }
   </script>
 </body>
 </html>
