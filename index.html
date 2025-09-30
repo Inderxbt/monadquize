@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monad Ecosystem Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+      flex: 1;
+    }
+    h1 {
+      text-align: center;
+      color: #5a2ecf;
+    }
+    .question {
+      font-size: 18px;
+      margin: 15px 0 10px;
+    }
+    .options button {
+      display: block;
+      width: 100%;
+      margin: 5px 0;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      background: #e9ecef;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .options button:hover {
+      background: #d6d6ff;
+    }
+    .correct {
+      background: #28a745 !important;
+      color: white;
+    }
+    .wrong {
+      background: #dc3545 !important;
+      color: white;
+    }
+    .answer {
+      font-size: 16px;
+      margin-top: 5px;
+      color: #333;
+      display: none;
+    }
+    footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 16px;
+      color: #555;
+    }
+    footer a {
+      text-decoration: none;
+      color: #5a2ecf;
+      font-weight: bold;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Monad Ecosystem Quiz</h1>
+    <div id="quiz"></div>
+  </div>
+
+  <footer>
+    Made with ❤️ by 
+    <a href="https://x.com/InderXBT" target="_blank">Inder</a> ❤️
+  </footer>
+
+  <script>
+    const questions = [
+      {
+        q: "1. What is Monad primarily known as?",
+        options: ["A Layer 2 solution", "An Ethereum-compatible Layer 1", "A sidechain", "A private blockchain"],
+        answer: 1
+      },
+      {
+        q: "2. What is Monad’s target transactions per second (TPS)?",
+        options: ["1,000", "5,000", "10,000", "100,000"],
+        answer: 2
+      },
+      {
+        q: "3. Monad is fully compatible with which virtual machine?",
+        options: ["Bitcoin VM", "Cosmos VM", "Solana VM", "Ethereum VM (EVM)"],
+        answer: 3
+      },
+      {
+        q: "4. Which feature ensures portability of Ethereum apps to Monad?",
+        options: ["Layer 0 consensus", "Bytecode compatibility", "Shard mechanism", "Custom RPC only"],
+        answer: 1
+      },
+      {
+        q: "5. Monad supports which RPC compatibility?",
+        options: ["Cosmos RPC", "Ethereum RPC", "Polkadot RPC", "Custom only"],
+        answer: 1
+      },
+      {
+        q: "6. What type of execution system does Monad use?",
+        options: ["Serial execution", "Parallel execution", "Hybrid execution", "Randomized execution"],
+        answer: 1
+      },
+      {
+        q: "7. Monad claims to provide how much faster finality compared to Ethereum?",
+        options: ["10x faster", "100x faster", "1,000x faster", "Same as Ethereum"],
+        answer: 0
+      },
+      {
+        q: "8. Which consensus mechanism does Monad utilize?",
+        options: ["Proof of Authority", "Proof of Work", "Proof of Stake", "Delegated Proof of Stake"],
+        answer: 2
+      },
+      {
+        q: "9. Monad’s execution layer is optimized for what?",
+        options: ["Gaming only", "DeFi & scalability", "NFT storage", "Private transactions"],
+        answer: 1
+      },
+      {
+        q: "10. Which of the following is TRUE about Monad?",
+        options: [
+          "It requires rewriting Ethereum apps",
+          "It runs EVM bytecode without changes",
+          "It only supports Solana programs",
+          "It is not open to developers"
+        ],
+        answer: 1
+      }
+    ];
+
+    const quizContainer = document.getElementById("quiz");
+
+    questions.forEach((item) => {
+      const div = document.createElement("div");
+      div.classList.add("quiz-item");
+
+      const q = document.createElement("div");
+      q.classList.add("question");
+      q.textContent = item.q;
+
+      const opts = document.createElement("div");
+      opts.classList.add("options");
+
+      item.options.forEach((opt, i) => {
+        const btn = document.createElement("button");
+        btn.textContent = opt;
+        btn.onclick = () => {
+          if (i === item.answer) {
+            btn.classList.add("correct");
+          } else {
+            btn.classList.add("wrong");
+            answerDiv.style.display = "block";
+          }
+          Array.from(opts.children).forEach(b => b.disabled = true);
+        };
+        opts.appendChild(btn);
+      });
+
+      const answerDiv = document.createElement("div");
+      answerDiv.classList.add("answer");
+      answerDiv.textContent = "Correct answer: " + item.options[item.answer];
+
+      div.appendChild(q);
+      div.appendChild(opts);
+      div.appendChild(answerDiv);
+      quizContainer.appendChild(div);
+    });
+  </script>
+</body>
+</html>
