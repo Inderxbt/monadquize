@@ -38,12 +38,13 @@
       padding: 10px;
       border: none;
       border-radius: 8px;
-      background: #e9ecef;
+      background: black;   /* default = black */
+      color: white;
       cursor: pointer;
       transition: 0.3s;
     }
     .options button:hover {
-      background: #d6d6ff;
+      opacity: 0.8;
     }
     .correct {
       background: #5a2ecf !important;
@@ -225,7 +226,7 @@
       if (correctCount === questions.length) {
         showModal("🎉 Congratulations! You answered all correctly. Monad Master!");
       } else if (wrongCount >= 2) {
-        showModal("😂 WTF Bro... Your " + wrongCount + " questions is wrong!");
+        showModal("😂 WTF Bro... Your " + wrongCount + " questions are wrong!");
       } else {
         showModal("✅ You got " + correctCount + " correct and " + wrongCount + " wrong.");
       }
