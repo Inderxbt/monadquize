@@ -46,7 +46,7 @@
       background: #d6d6ff;
     }
     .correct {
-      background: #28a745 !important;
+      background: #5a2ecf !important;
       color: white;
     }
     .wrong {
@@ -154,6 +154,7 @@
 
     const quizContainer = document.getElementById("quiz");
 
+    // Render questions
     questions.forEach((item, idx) => {
       const div = document.createElement("div");
       div.classList.add("quiz-item");
@@ -173,14 +174,12 @@
       item.options.forEach((opt, i) => {
         const btn = document.createElement("button");
         btn.textContent = opt;
+        btn.dataset.index = i;
+        btn.dataset.qid = idx;
         btn.onclick = () => {
+          // mark selected
+          Array.from(opts.children).forEach(b => b.dataset.selected = "false");
           btn.dataset.selected = "true";
-          Array.from(opts.children).forEach(b => b.disabled = true);
-          if (i === item.answer) {
-            btn.classList.add("correct");
-          } else {
-            btn.classList.add("wrong");
-          }
         };
         opts.appendChild(btn);
       });
@@ -191,6 +190,7 @@
       quizContainer.appendChild(div);
     });
 
+    // Submit button logic
     document.getElementById("submitBtn").onclick = () => {
       let correctCount = 0;
       let wrongCount = 0;
@@ -200,24 +200,32 @@
         let selected = Array.from(opts).find(b => b.dataset.selected === "true");
 
         if (selected) {
-          if (selected.textContent === item.options[item.answer]) {
+          if (parseInt(selected.dataset.index) === item.answer) {
+            selected.classList.add("correct");
             correctCount++;
           } else {
+            selected.classList.add("wrong");
             wrongCount++;
           }
         } else {
           wrongCount++;
         }
 
-        // Reveal answers
+        // Highlight correct answer in purple
+        opts[item.answer].classList.add("correct");
+
+        // Reveal correct answer text
         document.getElementById("answer-" + idx).style.display = "block";
+
+        // disable all options
+        Array.from(opts).forEach(b => b.disabled = true);
       });
 
       // Show modal result
       if (correctCount === questions.length) {
         showModal("🎉 Congratulations! You answered all correctly. Monad Master!");
-      } else if (wrongCount >= 6) {
-        showModal("😂 WTF Bro... your " + wrongCount + " questions is wrong!");
+      } else if (wrongCount >= 2) {
+        showModal("😂 WTF Bro... Your " + wrongCount + " questions is wrong!");
       } else {
         showModal("✅ You got " + correctCount + " correct and " + wrongCount + " wrong.");
       }
